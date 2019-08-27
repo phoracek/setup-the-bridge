@@ -10,8 +10,9 @@ podman run \
   -e BRIDGE_NAME=brext \
   -e NIC_NAME=eno2 \
   -e KEEP_RUNNING=0 \
-  TODO-mount-dbus-and-netns \
-  quay.io/phoracek/setup-the-bridge
+  -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
+  --network host \
+  quay.io/phoracek/setup-the-bridge:devel
 ```
 
 ## Run the container as a daemon set
