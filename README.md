@@ -10,13 +10,13 @@ podman run \
   -e BRIDGE_NAME=brext \
   -e NIC_NAME=eno2 \
   -e KEEP_RUNNING=0 \
-  TODO-mount-dbus-and-netns \
+  --privileged \
+  -v /run/dbus/system_bus_socket:/run/dbus/system_bus_socket \
+  --network host \
   quay.io/phoracek/setup-the-bridge
 ```
 
 ## Run the container as a daemon set
-
-TODO:
 
 ```yaml
 cat <<EOF | kubectl create -f -
@@ -36,6 +36,7 @@ spec:
       labels:
         name: setup-the-bridge
     spec:
+      hostNetwork: true
       containers:
       - name: setup-the-bridge
         image: quay.io/phoracek/setup-the-bridge
@@ -46,6 +47,16 @@ spec:
           value: "eno2"
         - name: KEEP_RUNNING
           value: "1"
+        volumeMounts:
+        - name: dbus-socket
+          mountPath: /run/dbus/system_bus_socket
+        securityContext:
+          privileged: true
+      volumes:
+      - name: dbus-socket
+        hostPath:
+          path: /run/dbus/system_bus_socket
+          type: Socket
 EOF
 ```
 
