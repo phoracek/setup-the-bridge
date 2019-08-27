@@ -8,6 +8,7 @@ interface.
 ```shell
 podman run \
   -e BRIDGE_NAME=brext \
+  -e NIC_NAME=eno2 \
   -e KEEP_RUNNING=0 \
   TODO-mount-dbus-and-netns \
   quay.io/phoracek/setup-the-bridge
@@ -41,6 +42,8 @@ spec:
         env:
         - name: BRIDGE_NAME
           value: "brext"
+        - name: NIC_NAME
+          value: "eno2"
         - name: KEEP_RUNNING
           value: "1"
 EOF
